@@ -29,6 +29,21 @@ Note : Copy Rows into newlyCreatedBoard->rows , and vice versa for cols ,
 Also copy 0 for emptyTileRow,emptyTileCol
 */
 Board * createBoard(int rows, int cols){
+	int **board = (int **)malloc(rows*sizeof(int*));
+	struct Board *newlyCreatedBoard;
+	for (int i = 0; i < rows; i++)
+		board[i] = (int*)malloc(cols*sizeof(int));
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			newlyCreatedBoard->table[i][j] = board[i][j];
+		}
+	}
+	newlyCreatedBoard->rows = rows;
+	newlyCreatedBoard->cols = cols;
+	newlyCreatedBoard->emptyTileCol = 0;
+	newlyCreatedBoard->emptyTileRow = 0;
 	Board *changeThis = NULL;
 	return changeThis;
 }
@@ -51,7 +66,19 @@ you found in the tobeCopiedArray
 Do Nothing for Invalid Inputs
 */
 void initializeBoard(Board * source, int *tobeCopiedArray, int rows, int cols){
-
+	source->rows = 4;
+	source->cols = 4;
+	int k = 0;
+	for (int i = 0; i < source->rows; i++)
+	{
+		for (int j = 0; j < source->cols; j++)
+		{
+			source->table[i][j] = *(tobeCopiedArray + k);
+			k = k + 1;
+		}
+	}
+	source->emptyTileRow = 3;
+	source->emptyTileCol = 2;
 }
 
 /*
@@ -73,7 +100,26 @@ Example Output :Return 0
 Note : Order will always start from 1 and keep on increasing by 1 , till last but 1 element is reached , Last element will be 0.
 */
 int checkBoard(Board * board){
-	return 0;
+	int *arr = (int*)malloc(100 * sizeof(int));
+	int k = 0,count=0;
+	for (int i = 0; i < board->rows; i++)
+	{
+		for (int j = 0; j < board->cols; j++)
+		{
+			arr[k] = board->table[i][j];
+		}
+	}
+	if (arr[(board->rows*board->cols)-1] == 0)
+		count = count + 1;
+	for (int i = 1; i < (board->rows*board->cols) - 1; i++)
+	{
+		if (arr[i-1]<arr[i])
+			count = count + 1;
+	}
+	if (count == (board->rows*board->cols))
+		return 1;
+	else
+		return 0;
 }
 
 
@@ -93,19 +139,31 @@ void drawBoardOnScreen(Board *board){
 	----------[W] UP --- [S] Down --- [A] LEFT --- [D] Right--------------
 	*/
 
-	printf("\n\n\n\n\t\t\t\t****       YET TO IMPLEMENT THIS FUNCTION       ****\n");
-
+	//printf("\n\n\n\n\t\t\t\t****       YET TO IMPLEMENT THIS FUNCTION       ****\n");
+	for (int i = 0; i < board->rows; i++)
+	{
+		for (int j = 0; j < board->cols; j++)
+		{
+			if (board->table[i][j]==0)
+				printf("0  ");
+			else
+				printf("%d  ",board->table[i][j]);
+		}
+		printf("\n");
+	}
 }
 
 /*
 Clear The Screen , So that we can redraw the Board (which has modified values )
 */
 void clearScreen(){
+	system("cls");
 }
 
 /*
 Clear the Screen and ReDraw the Board ,Call above two functions
 */
 void clearAndRedrawScreen(Board * board){
-
+	clearScreen();
+	drawBoardOnScreen(board);
 }

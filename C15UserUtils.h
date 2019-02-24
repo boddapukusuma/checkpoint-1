@@ -16,6 +16,8 @@ Return the user .
 */
 User * createUser(char *name){
 	User *user = NULL;
+	user->name = name;
+	user->movesCount = 0;
 	return user;
 }
 
@@ -24,7 +26,8 @@ User * createUser(char *name){
 Increase moveCount of user by 1 ,if processInputOutCome is 1 ,Otherwise Leave it .
 */
 void modifyMoveCountBasedOnProccessInput(User *user, int processInputOutCome){
-
+	if (processInputOutCome == 1)
+		user->movesCount = user->movesCount + 1;
 	return;
 }
 
@@ -33,5 +36,5 @@ Print the Following String from User Information .Replace accordingly .Dont ask 
 "Hey Abhijith , You have played 43 Moves "
 */
 void printUser(User *user){
-	
+	printf("Hey %s ,You have played %d Moves", user->name, user->movesCount);
 }

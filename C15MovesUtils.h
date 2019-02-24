@@ -1,3 +1,8 @@
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "C15BoardUtils.h"
+#include "C15UserUtils.h"
 int goLeft(Board *board);
 int goUp(Board *board);
 int goDown(Board *board);
@@ -17,15 +22,27 @@ char takeInput()
 	Take input and return it ,Use fflush if scanf is being used .
 	Does this function need fflush ? Whats fflush ? Post your observations in the forum ,if fflush is present/not present.
 	*/
-	return 'z';
+	char letter;
+	scanf("%c", &letter);
+	while (isValidInput(letter) != 1)
+	{
+		scanf("%c", &letter);
+		if (isValidInput(letter) == 1)
+		{
+			break;
+		}
+	}
+	return letter;
 }
 /*
 Return 1 for Valid Input ie if w,a,s,d,W,A,S,D are entered .
 Return 0 for all other inputs
 */
 int isValidInput(char letter){
-
-	return 0;
+	if (letter == 'w' || letter == 'a' || letter == 's' || letter == 'd' || letter == 'W' || letter == 'A' || letter == 'S' || letter == 'D')
+		return 1;
+	else
+		return 0;
 }
 /*
 Process the Given Input .Ie Decide whether to move Left , Right , Up ,or Down based on W,A,S,D,w,a,s,d.
@@ -41,7 +58,28 @@ int processInput(Board *board, char inputChar)
 	/*
 	Handle the input char inputChar ,which is either w,a,s,d,W,A,S,D for up,left,down and right
 	*/
-	return 1;
+	if (inputChar == 'a' || inputChar == 'A')
+	{
+		goLeft(board);
+		return 1;
+	}
+	else if (inputChar == 'd' || inputChar == 'D')
+	{
+		goRight(board);
+		return 1;
+	}
+	else if (inputChar == 'w' || inputChar == 'W')
+	{
+		goUp(board);
+		return 1;
+	}
+	else if (inputChar == 's' || inputChar == 'D')
+	{
+		goDown(board);
+		return 1;
+	}
+	else
+		return 0;
 }
 
 /*
@@ -53,6 +91,10 @@ Steps to be Done :
 4)Call printUser
 */
 void playMove(Board *board, User *user, char choice){
+	int res=processInput(board, choice);
+	modifyMoveCountBasedOnProccessInput(user,res);
+	clearAndRedrawScreen(board);
+	printUser(user);
 	printf("Play move not implemented yet , Remove this printf btw ");
 }
 
@@ -62,8 +104,10 @@ Return 1 if the move is possible, 0 other wise .
 */
 int goLeft(Board *board)
 {
-
-	return 0;
+	if ( board->emptyTileCol<board->cols)
+		return 1;
+	else
+		return 0;
 }
 
 /*
@@ -72,7 +116,10 @@ Return 1 if the move is possible, 0 other wise .
 */
 int goRight(Board *board)
 {
-	return 0;
+	if (board->emptyTileCol>0)
+		return 1;
+	else
+		return 0;
 }
 
 /*
@@ -80,7 +127,10 @@ Move the 0 Tile one position to the UP .
 Return 1 if the move is possible, 0 other wise .
 */
 int goUp(Board *board){
-	return 0;
+	if (board->emptyTileRow>board->rows)
+		return 1;
+	else
+		return 0;
 }
 
 /*
@@ -89,7 +139,10 @@ Return 1 if the move is possible, 0 other wise .
 */
 int goDown(Board *board){
 	
-	return 0;
+	if (board->emptyTileRow>0)
+		return 1;
+	else
+		return 0;
 }
 
 
@@ -98,5 +151,12 @@ You can use this Helper SWAP Function which can remove lots of extra Code from a
 */
 void swap(Board *board, int x1, int y1, int x2, int y2)
 {
-	
+	int temp;
+	temp = x2;
+	x2 = x1;
+	x1 = temp;
+	temp = y2;
+	y2 = y1;
+	y1 = temp;
+
 }
